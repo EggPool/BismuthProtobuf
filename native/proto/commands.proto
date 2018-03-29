@@ -1,0 +1,51 @@
+syntax = "proto2";
+
+package bismuth;
+
+message TX {
+  optional int32 int32_value=1;
+}
+
+message IP {
+  // Would "bytes" be better suited?
+  required uint32 ipv4=1;
+  optional uint64 ipv6a=2;
+  optional uint64 ipv6b=3;  
+  optional uint32 port=4 [default = 5658 ];
+}
+  
+message Command {
+  enum Type {
+    sendsync = 0;
+    version = 1;
+    ok = 2;
+    notok = 3;
+    hello = 4;
+    tx = 5;
+    peers = 6;
+    /*
+    sync = 5;
+    blockscf = 6;
+    blocksrj = 7;
+    nonewblk = 8;
+    blocksfnd = 9;
+    */
+    message = 10;
+    /*
+    // The following will be "message" type : just an optional string
+    Mempool_insert_finished = 8;
+    Alias_free = 9;
+    Alias_registered = 10;
+    */
+  }
+  required Type command = 1;
+  
+  oneof param {
+	string string_value=2;
+	int32 int32_value=3;
+  }
+  
+  repeated TX txs = 4;
+  
+  repeated IP ips = 5;
+}
